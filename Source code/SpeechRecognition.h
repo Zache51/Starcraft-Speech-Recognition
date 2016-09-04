@@ -45,5 +45,7 @@ public:
 
 	*/
 	void getCommand(std::vector<int>& voiceCommand);
+
+	bool switchSilentMode();
 };
 

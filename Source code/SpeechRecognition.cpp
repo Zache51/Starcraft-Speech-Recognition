@@ -168,19 +168,19 @@ void SpeechRecognition::getCommand(std::vector<int>& voiceCommand)
 			SPPHRASE* phrase = NULL;
 			hr = srEvent.RecoResult()->GetPhrase(&phrase);
 
-			if (0 == wcscmp(L"ruleListening", phrase->Rule.pszName))
-			{
-				int command = phrase->pProperties->vValue.intVal;
-				if (command == 1) // Start
-				{
-					silentMode = false;
-				}
-				else if (command == 2) // stop
-				{
-					silentMode = true;
-				}
-				voiceCommand.push_back(command);
-			}
+			//if (0 == wcscmp(L"ruleListening", phrase->Rule.pszName))
+			//{
+			//	int command = phrase->pProperties->vValue.intVal;
+			//	if (command == 1) // Start
+			//	{
+			//		silentMode = false;
+			//	}
+			//	else if (command == 2) // stop
+			//	{
+			//		silentMode = true;
+			//	}
+			//	voiceCommand.push_back(command);
+			//}
 
 			if (!silentMode)
 			{
@@ -199,4 +199,11 @@ void SpeechRecognition::getCommand(std::vector<int>& voiceCommand)
 
 		}
 	}
+}
+
+bool SpeechRecognition::switchSilentMode()
+{
+	bool r = !silentMode;
+	silentMode = r;
+	return r;
 }

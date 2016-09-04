@@ -257,28 +257,40 @@ void ExampleAIModule::onFrame()
 	std::vector<int> voiceCommand;
 	sr->getCommand(voiceCommand);
 
+	if (Broodwar->getKeyState(BWAPI::Key::K_PAUSE))
+	{
+		if (sr->switchSilentMode())
+		{
+			Broodwar->sendText("Voice commands disabled");
+		}
+		else
+		{
+			Broodwar->sendText("Voice commands enabled");
+		}
+	}
+
 	if (!voiceCommand.empty())
 	{
-		if (voiceCommand.size() == 1) // Listening command
-		{
-			if (voiceCommand[0] == 1)
-			{
-				Broodwar->sendText("Voice commands enabled");
-			}
-			else if (voiceCommand[0] == 2)
-			{
-				Broodwar->sendText("Voice commands disabled");
-			}
-		}
-		else // Game command
-		{
+		//if (voiceCommand.size() == 1) // Listening command
+		//{
+		//	if (voiceCommand[0] == 1)
+		//	{
+		//		Broodwar->sendText("Voice commands enabled");
+		//	}
+		//	else if (voiceCommand[0] == 2)
+		//	{
+		//		Broodwar->sendText("Voice commands disabled");
+		//	}
+		//}
+		//else // Game command
+		//{
 			std::stringstream ss;
 			ss << voiceCommand[0];
 			
 			std::string amount;
 			ss >> amount;
 
-			std::string response = "Produce " + amount + " " + typeToString(voiceCommand[1]);
+			std::string response = "Trying to produce " + amount + " " + typeToString(voiceCommand[1]);
 			if (voiceCommand[0] > 1) response += "s";
 
 			Broodwar->sendText(response.c_str());
@@ -286,7 +298,7 @@ void ExampleAIModule::onFrame()
 			{
 				addToQueue(voiceCommand[1]);
 			}
-		}
+		//}
 
 	}
 
