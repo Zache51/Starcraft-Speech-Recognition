@@ -1,0 +1,113 @@
+<!-- English-American (409) -->
+<GRAMMAR>
+	
+	<RULE NAME="ruleProduce" TOPLEVEL="ACTIVE">
+		<P>produce</P>
+		<P>
+			<L PROPNAME="numbers">
+				<P VAL="1">one</P>
+				<P VAL="2">two</P>
+				<P VAL="3">three</P>
+				<P VAL="4">four</P>
+				<P VAL="5">five</P>
+				<P VAL="6">six</P>
+				<P VAL="7">seven</P>
+				<P VAL="8">eight</P>
+				<P VAL="9">nine</P>
+				<P VAL="10">ten</P>
+				<P VAL="11">eleven</P>
+				<P VAL="12">twelve</P>
+				<P VAL="13">thirteen</P>
+				<P VAL="14">+fourteen</P>
+				<P VAL="15">+fifteen</P>
+				<P VAL="16">+sixteen</P>
+				<P VAL="17">+seventeen</P>
+				<P VAL="18">+eighteen</P>
+				<P VAL="19">+nineteen</P>
+				<P VAL="20">twenty</P>
+			</L>
+		</P>
+		<P>
+			<L PROPNAME="units">
+				<!-- Command Center units-->
+				<P VAL="1">worker</P>
+				<P VAL="1">workers</P>
+				<P VAL="1">SCV</P>
+				<P VAL="1">SCVs</P>
+				
+				<!-- Barracks units-->
+				<P VAL="2">medic</P>
+				<P VAL="2">medics</P>
+				<P VAL="3">fire bat</P>
+				<P VAL="3">fire bats</P>
+				<P VAL="4">marine</P>
+				<P VAL="4">marines</P>
+				<P VAL="5">ghost</P>
+				<P VAL="5">ghosts</P>
+				
+				<!-- Factory units-->
+				<P VAL="6">vulture</P>
+				<P VAL="6">vultures</P>
+				<P VAL="7">goliath</P>
+				<P VAL="7">goliaths</P>
+				<P VAL="8">siege tank</P>
+				<P VAL="8">siege tanks</P>
+				
+				<!-- Starport units-->
+				<P VAL="9">wraith</P>
+				<P VAL="9">wraiths</P>
+				<P VAL="10">dropship</P>
+				<P VAL="10">dropships</P>
+				<P VAL="11">valkyrie</P>
+				<P VAL="11">valkyries</P>
+				<P VAL="12">science vessel</P>
+				<P VAL="12">science vessels</P>
+				<P VAL="13">battlecruiser</P>
+				<P VAL="13">battlecruisers</P>
+				
+			</L>
+		</P>
+	</RULE>
+	
+	<RULE NAME="ruleListening" TOPLEVEL="ACTIVE">
+		<P>
+			<L PROPNAME="ss">
+				<P VAL="1">start</P>
+				<P VAL="2">stop</P>
+			</L>
+		</P>
+		<P>listening</P>
+	</RULE>
+	
+	<!--
+	<RULE NAME="ruleNumbers">
+		<P>
+			<L PROPNAME="numbers">
+				<P>one</P>
+				<P>two</P>
+				<P>three</P>
+				<P>four</P>
+				<P>five</P>
+				<P>six</P>
+				<P>seven</P>
+				<P>eight</P>
+				<P>nine</P>
+			</L>
+		</P>
+	</RULE>
+	
+	<RULE NAME="ruleUnits">
+		<P>
+			<L PROPNAME="units">
+				<P VAL="1">marine</P>
+				<P VAL="1">marines</P>
+				<P VAL="2">medic</P>
+				<P VAL="2">medics</P>
+				<P VAL="3">fire bat</P>
+				<P VAL="3">fire bats</P>
+			</L>
+		</P>
+	</RULE>
+	-->
+
+</GRAMMAR>
