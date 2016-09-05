@@ -15,6 +15,7 @@ std::vector<UnitType> bQueue;
 std::vector<UnitType> ccQueue;
 std::vector<UnitType> fQueue;
 std::vector<UnitType> spQueue;
+std::vector<UnitType> nQueue;
 
 // Own function
 void addToQueue(int type)
@@ -87,6 +88,11 @@ void addToQueue(int type)
 	case 13:
 	{
 		spQueue.push_back(UnitTypes::Terran_Battlecruiser);
+		break;
+	}
+	case 14:
+	{
+		nQueue.push_back(UnitTypes::Terran_Nuclear_Missile);
 		break;
 	}
 	}
@@ -166,6 +172,11 @@ std::string typeToString(int type)
 			   stype = "battlecruiser";
 			   break;
 	}
+	case 14:
+	{
+			   stype = "nuke";
+			   break;
+	}
 	}
 	return stype;
 }
@@ -176,8 +187,6 @@ void ExampleAIModule::onStart()
 
   Broodwar->sendText("show me the money");
   Broodwar->sendText("operation cwal");
-
-  Broodwar->sendText("TEEST TESTY");
 
   sr = new SpeechRecognition();
 
@@ -355,6 +364,15 @@ void ExampleAIModule::onFrame()
 			{
 				u->train(spQueue.front());
 				spQueue.pop_back();
+				break;
+			}
+		}
+		else if (u->getType() == UnitTypes::Terran_Nuclear_Silo)
+		{
+			if (!u->isTraining() && !spQueue.empty())
+			{
+				u->train(nQueue.front());
+				nQueue.pop_back();
 				break;
 			}
 		}

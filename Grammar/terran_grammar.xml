@@ -6,25 +6,17 @@
 		<P>
 			<L PROPNAME="numbers">
 				<P VAL="1">one</P>
+				<P VAL="1">+a</P>
+				<P VAL="1">+an</P>
 				<P VAL="2">two</P>
-				<P VAL="3">three</P>
+				<P VAL="3">-three</P>
 				<P VAL="4">four</P>
 				<P VAL="5">five</P>
 				<P VAL="6">six</P>
 				<P VAL="7">seven</P>
-				<P VAL="8">eight</P>
+				<P VAL="8">+eight</P>
 				<P VAL="9">nine</P>
 				<P VAL="10">ten</P>
-				<P VAL="11">eleven</P>
-				<P VAL="12">twelve</P>
-				<P VAL="13">thirteen</P>
-				<P VAL="14">+fourteen</P>
-				<P VAL="15">+fifteen</P>
-				<P VAL="16">+sixteen</P>
-				<P VAL="17">+seventeen</P>
-				<P VAL="18">+eighteen</P>
-				<P VAL="19">+nineteen</P>
-				<P VAL="20">twenty</P>
 			</L>
 		</P>
 		<P>
@@ -64,7 +56,12 @@
 				<P VAL="12">science vessels</P>
 				<P VAL="13">battlecruiser</P>
 				<P VAL="13">battlecruisers</P>
+				<P VAL="13">battle cruiser</P>
+				<P VAL="13">battle cruisers</P>
 				
+				<!-- Nuke silo -->
+				<P VAL="14">nuke</P>
+				<P VAL="14">nukes</P>
 			</L>
 		</P>
 	</RULE>
