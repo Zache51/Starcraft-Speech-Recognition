@@ -5,11 +5,33 @@ std::string LogHandler::dateFormat() const
 	time_t t = time(0);
 	struct tm * now = localtime(&t);
 
-	// Polish format
+	// Make it correct
 	now->tm_year += 1900;
+	now->tm_mon += 1;
+ 
 
 	std::stringstream date;
-	date << now->tm_year << "-" << now->tm_mday << "-" << now->tm_hour << "-" << now->tm_min;
+	date << "Date_";
+	date << now->tm_year << "-";
+
+
+	// Polish format with '0' for month, hour and minutes
+
+	std::string mon = std::to_string(now->tm_mon);
+	if (now->tm_mon < 10) mon = "0" + mon;
+
+	std::string mday = std::to_string(now->tm_mday);
+	if (now->tm_mday < 10) mday = "0" + mday;
+
+	std::string hour = std::to_string(now->tm_hour);
+	if (now->tm_hour < 10) hour = "0" + hour;
+
+	std::string min = std::to_string(now->tm_min);
+	if (now->tm_min < 10) min = "0" + min;
+
+
+	date << mon << "-" << mday << "_Timestamp_" << hour << "-" << min;
+	
 	return date.str();
 }
 
