@@ -11,6 +11,8 @@ LogHandler* lh;
 
 SpeechRecognition* sr;
 
+bool disableSpeech;
+
 std::vector<UnitType> bQueue;
 std::vector<UnitType> ccQueue;
 std::vector<UnitType> fQueue;
@@ -183,10 +185,12 @@ std::string typeToString(int type)
 
 void ExampleAIModule::onStart()
 {
+	disableSpeech = false;
+
 	lh = new LogHandler();
 
-  Broodwar->sendText("show me the money");
-  Broodwar->sendText("operation cwal");
+  //Broodwar->sendText("show me the money");
+  //Broodwar->sendText("operation cwal");
 
   sr = new SpeechRecognition();
 
@@ -225,6 +229,29 @@ void ExampleAIModule::onStart()
     if ( Broodwar->enemy() ) // First make sure there is an enemy
       Broodwar << "The matchup is " << Broodwar->self()->getRace() << " vs " << Broodwar->enemy()->getRace() << std::endl;
   }
+
+  if (lh->currentMap().c_str()[3] == '1')
+  {
+	  Broodwar->sendText("show me the money");
+	  Broodwar->sendText("operation cwal");
+	  Broodwar->sendText("Voice commands enabled for this match");
+  }
+  else if (lh->currentMap().c_str()[2] == 'c' && lh->currentMap().c_str()[2] == '2')
+  {
+	  sr->switchSilentMode();
+	  Broodwar->sendText("Voice commands disabled for this match");
+  }
+  else if (lh->currentMap().c_str()[2] == 'b' && lh->currentMap().c_str()[2] == '3')
+  {
+	  sr->switchSilentMode();
+	  Broodwar->sendText("Voice commands disabled for this match");
+  }
+  else
+  {
+	  Broodwar->sendText("Voice commands enabled for this match");
+  }
+
+  // c2, b3
 
   if (Broodwar->mapFileName() != lh->currentMap())
   {
@@ -268,15 +295,21 @@ void ExampleAIModule::onFrame()
 
 	if (Broodwar->getKeyState(BWAPI::Key::K_PAUSE))
 	{
-		if (sr->switchSilentMode())
+		if (!disableSpeech)
 		{
-			Broodwar->sendText("Voice commands disabled");
-		}
-		else
-		{
-			Broodwar->sendText("Voice commands enabled");
+			if (sr->switchSilentMode())
+			{
+				Broodwar->sendText("Voice commands disabled");
+			}
+			else
+			{
+				Broodwar->sendText("Voice commands enabled");
+			}
 		}
 	}
+
+	bool activateUpgrade = false;
+	bool startedUpgrade = false;
 
 	if (!voiceCommand.empty())
 	{
@@ -293,23 +326,39 @@ void ExampleAIModule::onFrame()
 		//}
 		//else // Game command
 		//{
-			std::stringstream ss;
-			ss << voiceCommand[0];
-			
-			std::string amount;
-			ss >> amount;
 
-			std::string response = "Trying to produce " + amount + " " + typeToString(voiceCommand[1]);
-			if (voiceCommand[0] > 1) response += "s";
-
-			Broodwar->sendText(response.c_str());
-			for (int i = 0; i < voiceCommand[0]; i++)
+		switch (voiceCommand[0])
+		{
+		case SpeechRuleType::SwitchState:
 			{
-				addToQueue(voiceCommand[1]);
+				break;
 			}
+		case SpeechRuleType::Produce:
+			{
+				std::string amount = std::to_string(voiceCommand[1]);
+
+				std::string response = "Trying to produce " + amount + " " + typeToString(voiceCommand[2]);
+				if (voiceCommand[1] > 1) response += "s";
+
+				Broodwar->sendText(response.c_str());
+				for (int i = 0; i < voiceCommand[1]; i++)
+				{
+					addToQueue(voiceCommand[2]);
+				}
+				break;
+			}
+		case SpeechRuleType::Upgrade:
+			{
+				activateUpgrade = true;
+				break;
+			}
+		}
+
+
 		//}
 
 	}
+
 
 	// Iterate through all the units that we own
 	for (auto &u : Broodwar->self()->getUnits())
@@ -337,6 +386,12 @@ void ExampleAIModule::onFrame()
 			{
 				u->train(bQueue.front());
 				bQueue.pop_back();
+
+				if (bQueue.empty() && Broodwar->self()->supplyTotal() == Broodwar->self()->supplyUsed())
+				{
+					Broodwar->sendText("Supply full, build more dupply depots!");
+				}
+
 				break;
 			}
 		}
@@ -346,6 +401,12 @@ void ExampleAIModule::onFrame()
 			{
 				u->train(ccQueue.front());
 				ccQueue.pop_back();
+
+				if (ccQueue.empty() && Broodwar->self()->supplyTotal() == Broodwar->self()->supplyUsed())
+				{
+					Broodwar->sendText("Supply full, build more dupply depots!");
+				}
+
 				break;
 			}
 		}
@@ -355,6 +416,12 @@ void ExampleAIModule::onFrame()
 			{
 				u->train(fQueue.front());
 				fQueue.pop_back();
+				
+				if (fQueue.empty() && Broodwar->self()->supplyTotal() == Broodwar->self()->supplyUsed())
+				{
+					Broodwar->sendText("Supply full, build more dupply depots!");
+				}
+
 				break;
 			}
 		}
@@ -364,6 +431,12 @@ void ExampleAIModule::onFrame()
 			{
 				u->train(spQueue.front());
 				spQueue.pop_back();
+
+				if (spQueue.empty() && Broodwar->self()->supplyTotal() == Broodwar->self()->supplyUsed())
+				{
+					Broodwar->sendText("Supply full, build more dupply depots!");
+				}
+
 				break;
 			}
 		}
@@ -373,9 +446,96 @@ void ExampleAIModule::onFrame()
 			{
 				u->train(nQueue.front());
 				nQueue.pop_back();
+
+				if (nQueue.empty() && Broodwar->self()->supplyTotal() == Broodwar->self()->supplyUsed())
+				{
+					Broodwar->sendText("Supply full, build more dupply depots!");
+				}
+
 				break;
 			}
 		}
+		else if (activateUpgrade)
+		{
+
+			std::string centerName = "NULL";
+
+
+			if (u->getType() == UnitTypes::Terran_Engineering_Bay)
+			{
+				if (voiceCommand[1] == 1)
+				{
+					if (voiceCommand[2] == 1)
+					{
+						u->upgrade(UpgradeTypes::Terran_Infantry_Weapons);
+						startedUpgrade = true;
+					}
+					else if (voiceCommand[2] == 2)
+					{
+						u->upgrade(UpgradeTypes::Terran_Infantry_Armor);
+						startedUpgrade = true;
+					}
+				}
+				centerName = "Engineering Bay";
+			}
+			if (u->getType() == UnitTypes::Terran_Armory)
+			{
+				switch (voiceCommand[1])
+				{
+				case 2: // Vehicle
+				{
+					if (voiceCommand[2] == 1)
+					{
+						u->upgrade(UpgradeTypes::Terran_Vehicle_Weapons);
+						startedUpgrade = true;
+					}
+					else if (voiceCommand[2] == 3)
+					{
+						u->upgrade(UpgradeTypes::Terran_Vehicle_Plating);
+						startedUpgrade = true;
+					}
+					break;
+				}
+				case 3: // Ship
+				{
+					if (voiceCommand[2] == 1)
+					{
+						u->upgrade(UpgradeTypes::Terran_Ship_Weapons);
+						startedUpgrade = true;
+					}
+					else if (voiceCommand[2] == 3)
+					{
+						u->upgrade(UpgradeTypes::Terran_Ship_Plating);
+						startedUpgrade = true;
+					}
+					break;
+				}
+				}
+				centerName = "Armory";
+			}
+
+			if (centerName != "NULL")
+			{
+				if (!startedUpgrade)
+				{
+					Broodwar->sendText("Could not start upgrade, dont know why");
+				}
+
+				std::string msg = centerName + " is currently upgrading " + std::to_string(u->getUpgrade());
+				Broodwar->sendText(msg.c_str());
+
+				std::stringstream ss;
+				ss << "Upgrade is completed in " << u->getRemainingUpgradeTime() << " seconds";
+				Broodwar->sendText(ss.str().c_str());
+			}
+
+		}
+
+	}
+
+	if (!startedUpgrade && activateUpgrade)
+	{
+		Broodwar->sendText("Could not start upgrade because facility is not built");
 	}
 
  // closure: unit iterator

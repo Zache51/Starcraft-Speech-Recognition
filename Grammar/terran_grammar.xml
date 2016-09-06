@@ -1,8 +1,27 @@
 <!-- English-American (409) -->
 <GRAMMAR>
 	
+	<RULE NAME="ruleUpgrade" TOPLEVEL="ACTIVE">
+	<P>upgrade</P>
+		<P>
+			<L PROPNAME="division">
+				<P VAL="1">infantry</P>
+				<P VAL="2">vehicle</P>
+				<P VAL="3">ship</P>
+			</L>
+		</P>
+		<P>
+			<L PROPNAME="toUpgrade">
+				<P VAL="1">weapons</P>
+				<P VAL="2">armor</P>
+				<P VAL="2">armour</P>
+				<P VAL="3">plating</P>
+			</L>
+		</P>
+	</RULE>
+	
 	<RULE NAME="ruleProduce" TOPLEVEL="ACTIVE">
-		<P>produce</P>
+		<P>+produce</P>
 		<P>
 			<L PROPNAME="numbers">
 				<P VAL="1">one</P>

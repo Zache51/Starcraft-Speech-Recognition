@@ -8,6 +8,8 @@
 #include <vector>
 #include <sstream>
 
+enum SpeechRuleType { SwitchState, Produce, Upgrade };
+
 class SpeechRecognition
 {
 private:
@@ -16,6 +18,7 @@ private:
 
 	const wchar_t* ruleProduce = L"ruleProduce";
 	const wchar_t* ruleListening = L"ruleListening";
+	const wchar_t* ruleUpgrade = L"ruleUpgrade";
 
 	bool m_bInSound;
 	bool m_bGotReco;

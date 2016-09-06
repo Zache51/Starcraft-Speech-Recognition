@@ -81,6 +81,8 @@ void SpeechRecognition::initializeGrammar()
 	checkResult(hr);
 	hr = recoGrammar->SetRuleState(ruleProduce, 0, SPRS_ACTIVE);
 	checkResult(hr);
+	hr = recoGrammar->SetRuleState(ruleUpgrade, 0, SPRS_ACTIVE);
+	checkResult(hr);
 
 	hr = recoGrammar->SetGrammarState(SPGS_ENABLED);
 }
@@ -184,13 +186,24 @@ void SpeechRecognition::getCommand(std::vector<int>& voiceCommand)
 
 			if (!silentMode)
 			{
-				if (0 == wcscmp(L"ruleProduce", phrase->Rule.pszName))
+				if (0 == wcscmp(ruleProduce, phrase->Rule.pszName))
 				{
 					const SPPHRASEPROPERTY *number = phrase->pProperties;
 					const SPPHRASEPROPERTY *unit = number->pNextSibling;
 
+					voiceCommand.push_back(SpeechRuleType::Produce);
 					voiceCommand.push_back(number->vValue.intVal);
 					voiceCommand.push_back(unit->vValue.intVal);
+				}
+
+				if (0 == wcscmp(ruleUpgrade, phrase->Rule.pszName))
+				{
+					const SPPHRASEPROPERTY *division = phrase->pProperties;
+					const SPPHRASEPROPERTY *toUpgrade = division->pNextSibling;
+
+					voiceCommand.push_back(SpeechRuleType::Upgrade);
+					voiceCommand.push_back(division->vValue.intVal);
+					voiceCommand.push_back(toUpgrade->vValue.intVal);
 				}
 			}
 
