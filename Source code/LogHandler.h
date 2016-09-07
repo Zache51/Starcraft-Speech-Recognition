@@ -45,7 +45,7 @@ public:
 	~LogHandler();
 
 	// Log data depending on the stage of the session
-	void createMapLog();
+	void createMapLog(std::vector<std::string> commands);
 
 	// Returns the expected map for the current stage
 	std::string currentMap() const;

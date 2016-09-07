@@ -162,7 +162,7 @@ LogHandler::LogHandler()
 LogHandler::~LogHandler(){}
 
 
-void LogHandler::createMapLog()
+void LogHandler::createMapLog(std::vector<std::string> commands)
 {
 	// Create file
 	std::string filePath = "experiment-logs/";
@@ -211,7 +211,14 @@ void LogHandler::createMapLog()
 	log << "APM?:" << Broodwar->getAPM() << std::endl;
 	log << std::endl;
 
-
+	log << std::endl;
+	log << std::endl;
+	log << std::endl;
+	log << "Registered voice commands" << std::endl;
+	for (int i = 0; i < commands.size(); i++)
+	{
+		log << commands[i] << std::endl;
+	}
 
 	log.close();
 

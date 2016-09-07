@@ -19,6 +19,8 @@ std::vector<UnitType> fQueue;
 std::vector<UnitType> spQueue;
 std::vector<UnitType> nQueue;
 
+std::vector<std::string> savedCommands;
+
 // Own function
 void addToQueue(int type)
 {
@@ -269,7 +271,7 @@ void ExampleAIModule::onEnd(bool isWinner)
 
   if (Broodwar->mapFileName() == lh->currentMap())
   {
-	  lh->createMapLog();
+	  lh->createMapLog(savedCommands);
   }
 }
 
@@ -340,6 +342,8 @@ void ExampleAIModule::onFrame()
 				std::string response = "Trying to produce " + amount + " " + typeToString(voiceCommand[2]);
 				if (voiceCommand[1] > 1) response += "s";
 
+				savedCommands.push_back(response);
+
 				Broodwar->sendText(response.c_str());
 				for (int i = 0; i < voiceCommand[1]; i++)
 				{
@@ -389,7 +393,7 @@ void ExampleAIModule::onFrame()
 
 				if (bQueue.empty() && Broodwar->self()->supplyTotal() == Broodwar->self()->supplyUsed())
 				{
-					Broodwar->sendText("Supply full, build more dupply depots!");
+					Broodwar->sendText("Supply full, build more supply depots!");
 				}
 
 				break;
@@ -404,7 +408,7 @@ void ExampleAIModule::onFrame()
 
 				if (ccQueue.empty() && Broodwar->self()->supplyTotal() == Broodwar->self()->supplyUsed())
 				{
-					Broodwar->sendText("Supply full, build more dupply depots!");
+					Broodwar->sendText("Supply full, build more supply depots!");
 				}
 
 				break;
@@ -419,7 +423,7 @@ void ExampleAIModule::onFrame()
 				
 				if (fQueue.empty() && Broodwar->self()->supplyTotal() == Broodwar->self()->supplyUsed())
 				{
-					Broodwar->sendText("Supply full, build more dupply depots!");
+					Broodwar->sendText("Supply full, build more supply depots!");
 				}
 
 				break;
@@ -434,7 +438,7 @@ void ExampleAIModule::onFrame()
 
 				if (spQueue.empty() && Broodwar->self()->supplyTotal() == Broodwar->self()->supplyUsed())
 				{
-					Broodwar->sendText("Supply full, build more dupply depots!");
+					Broodwar->sendText("Supply full, build more supply depots!");
 				}
 
 				break;
@@ -449,7 +453,7 @@ void ExampleAIModule::onFrame()
 
 				if (nQueue.empty() && Broodwar->self()->supplyTotal() == Broodwar->self()->supplyUsed())
 				{
-					Broodwar->sendText("Supply full, build more dupply depots!");
+					Broodwar->sendText("Supply full, build more supply depots!");
 				}
 
 				break;
@@ -460,18 +464,22 @@ void ExampleAIModule::onFrame()
 
 			std::string centerName = "NULL";
 
+			std::string givenCommand = "Upgrade ";
 
 			if (u->getType() == UnitTypes::Terran_Engineering_Bay)
 			{
+				givenCommand += "Infantry ";
 				if (voiceCommand[1] == 1)
 				{
 					if (voiceCommand[2] == 1)
 					{
+						givenCommand += "Weapons";
 						u->upgrade(UpgradeTypes::Terran_Infantry_Weapons);
 						startedUpgrade = true;
 					}
 					else if (voiceCommand[2] == 2)
 					{
+						givenCommand += "Armour";
 						u->upgrade(UpgradeTypes::Terran_Infantry_Armor);
 						startedUpgrade = true;
 					}
@@ -484,13 +492,16 @@ void ExampleAIModule::onFrame()
 				{
 				case 2: // Vehicle
 				{
+					givenCommand += "Vehicle ";
 					if (voiceCommand[2] == 1)
 					{
+						givenCommand += "Weapons ";
 						u->upgrade(UpgradeTypes::Terran_Vehicle_Weapons);
 						startedUpgrade = true;
 					}
 					else if (voiceCommand[2] == 3)
 					{
+						givenCommand += "Plating";
 						u->upgrade(UpgradeTypes::Terran_Vehicle_Plating);
 						startedUpgrade = true;
 					}
@@ -498,13 +509,16 @@ void ExampleAIModule::onFrame()
 				}
 				case 3: // Ship
 				{
+					givenCommand += "Ship ";
 					if (voiceCommand[2] == 1)
 					{
+						givenCommand += "Weapons";
 						u->upgrade(UpgradeTypes::Terran_Ship_Weapons);
 						startedUpgrade = true;
 					}
 					else if (voiceCommand[2] == 3)
 					{
+						givenCommand += "Plating";
 						u->upgrade(UpgradeTypes::Terran_Ship_Plating);
 						startedUpgrade = true;
 					}
@@ -516,6 +530,8 @@ void ExampleAIModule::onFrame()
 
 			if (centerName != "NULL")
 			{
+				savedCommands.push_back(givenCommand);
+
 				if (!startedUpgrade)
 				{
 					Broodwar->sendText("Could not start upgrade, dont know why");
@@ -536,6 +552,7 @@ void ExampleAIModule::onFrame()
 	if (!startedUpgrade && activateUpgrade)
 	{
 		Broodwar->sendText("Could not start upgrade because facility is not built");
+		savedCommands.push_back("Upgrade attempt failed");
 	}
 
  // closure: unit iterator
